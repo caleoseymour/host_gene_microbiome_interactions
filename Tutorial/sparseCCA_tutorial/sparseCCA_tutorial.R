@@ -95,7 +95,7 @@ tune_params_grid_search <- function( X, Y){
         print(paste0("Index: i = ",i,", j =", j," k = ",k)); flush.console()
         #compute weights with sample k held out:
         #Default niter = 15 edited to 5 to speed this up.
-        res <- CCA(X[-k,],Y[-k,], penaltyx = penaltyX[i], penaltyz = penaltyY[j], K=1, niter = 5, trace = F, standardize = T)
+        res <- CCA(X[-k,],Y[-k,], penaltyx = penaltyX[i], penaltyz = penaltyY[j], K=1, niter = 5, trace = F, standardize = T, typex = 'standard', typez = 'standard')
         ## Compute scores for k'th sample for first pair of canonical variables
         ## Take weight of features (res$u and res$v) computed using all except 
         ## the kth sample and multiple it by values for the kth sample in the 
@@ -136,7 +136,7 @@ test_significance_LOOCV <- function(X, Y, bestpenaltyX, bestpenaltyY, num_compon
   corr_r <- c()
   for(i in 1:nrow(genes)){ #n = no. of samples
     #compute weights with sample i held out:
-    res <- CCA(X[-i,],Y[-i,], penaltyx=bestpenaltyX, penaltyz=bestpenaltyY, K=cca.k, trace = F) ## default niter = 15 which is spit out when trace = T (default)
+    res <- CCA(X[-i,],Y[-i,], penaltyx=bestpenaltyX, penaltyz=bestpenaltyY, K=cca.k, trace = F, typex = 'standard', typez = 'standard') ## default niter = 15 which is spit out when trace = T (default)
     ###compute scores for i'th sample for each component (pair of canonical variables)
     for(j in 1:cca.k){
       #print(paste0("i = ", i," K = ", j)); flush.console()
@@ -216,7 +216,3 @@ test_significance_LOOCV <- function(X, Y, bestpenaltyX, bestpenaltyY, num_compon
 # ## and TRUE if it didn't exist but was succesfully created.
 # ifelse(!dir.exists(dirname), dir.create(dirname), FALSE)
 # save_CCA_components(cca[[1]],sig,dirname)
-
-
-
-
